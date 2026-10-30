@@ -26,6 +26,22 @@ class ProdutoService
         return $this->produtos->create($dados);
     }
 
+    public function update(Produto $produto, array $dados): Produto
+    {
+        // Usa os valores atuais quando preco ou preco_custo não forem enviados
+        $this->verificarMargem(
+            $dados['preco'] ?? $produto->preco,
+            $dados['preco_custo'] ?? $produto->preco_custo
+        );
+
+        return $this->produtos->update($produto, $dados);
+    }
+
+    public function delete(Produto $produto): void
+    {
+        $this->produtos->delete($produto);
+    }
+
     private function verificarMargem(float $preco, float $preco_custo)
     {
         // O preço mínimo de um produto deve ser
